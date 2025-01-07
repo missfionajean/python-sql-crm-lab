@@ -59,8 +59,21 @@ Please select from the following options:
             connection.commit()
             # prints success message for user
             print('Company name successfully updated!')
-        # elif selection == '4':
-
+        elif selection == '4':
+            # stores entire company table in list
+            cursor.execute('SELECT * FROM companies')
+            all_companies = cursor.fetchall()
+            # for loop to display list in readable format
+            print("All Companies:")
+            for company in all_companies:
+                print(str(company[0]) + '.' + ' ' + company[1])
+            # asks user to select a company to be deleted
+            company_id = input('Enter the # of company to be deleted: ')
+            # deletes selected entry from database
+            cursor.execute('DELETE FROM companies WHERE id = %s', [company_id])
+            connection.commit()
+            # prints success message for user
+            print('Company successfully deleted!')
         elif selection == '5':
             main_menu()
 
