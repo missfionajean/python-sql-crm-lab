@@ -94,6 +94,36 @@ Please select from the following options:
         if selection == '1':
             cursor.execute('SELECT * FROM employees')
             print(cursor.fetchall())
+        elif selection == '2':
+            employee_name = input('Enter employee name: ')
+            employee_company_id = input('Enter company ID: ')
+            cursor.execute('INSERT INTO employees (name, company_id) VALUES (%s, %s)', [employee_name, employee_company_id])
+            connection.commit()
+            print('Employee successfully added to database!')
+        elif selection == '3':
+            cursor.execute('SELECT * FROM employees')
+            all_employees = cursor.fetchall()
+            print("All Employees:")
+            for employee in all_employees:
+                print(str(employee[0]) + '.' + ' ' + employee[1])
+            employee_id = input('Enter the # of the employee to be updated: ')
+            employee_name = input('Enter new employee name: ')
+            employee_company_id = input('Enter new company ID: ')
+            cursor.execute('UPDATE employees SET name = %s, company_id = %s WHERE id = %s', [employee_name, employee_company_id, employee_id])
+            connection.commit()
+            print('Employee successfully updated!')
+        elif selection == '4':
+            cursor.execute('SELECT * FROM employees')
+            all_employees = cursor.fetchall()
+            print("All Employees:")
+            for employee in all_employees:
+                print(str(employee[0]) + '.' + ' ' + employee[1])
+            employee_id = input('Enter the # of the employee to be deleted: ')
+            cursor.execute('DELETE FROM employees WHERE id = %s', [employee_id])
+            connection.commit()
+            print('Employee successfully deleted!')
+        elif selection == '5':
+            main_menu()
 
 
 # main program loop
