@@ -45,6 +45,7 @@ CREATE SEQUENCE public.companies_id_seq
     CACHE 1;
 
 
+-- ALTER SEQUENCE public.companies_id_seq OWNER TO missfionajean;
 ALTER SEQUENCE public.companies_id_seq OWNER TO missfionajean;
 
 --
