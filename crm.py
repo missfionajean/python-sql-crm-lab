@@ -1,3 +1,15 @@
+# import OS module for screen clearing between actions
+import os
+
+# call function to dynamically clear terminal based on OS
+def clear_terminal():
+    # For Windows
+    if os.name == 'nt':
+        os.system('cls')
+    # For Mac and Linux
+    else:
+        os.system('clear')
+
 # imports psycopg2 to connect to local sql DB
 import psycopg2
 connection = psycopg2.connect(
@@ -20,9 +32,8 @@ Please select from the following options:
 2. Employees
 3. Exit
 """)
-
-
-def company_submenu():
+    
+def company_menu_text():
     print("""COMPANIES
 
 Please select from the following options:
@@ -33,9 +44,11 @@ Please select from the following options:
 4. Delete Company
 5. Back to Main Menu
 """)
-    #
+    
+def company_submenu():
     is_on_company_menu = True
     while is_on_company_menu:
+        company_menu_text()
         selection = input('> ')
         if selection == '1':
             
@@ -56,18 +69,18 @@ Please select from the following options:
                 #simple query if there will be a match for the provided 
                 if view_employees == 'NO':
                     is_on_individual_company = False
+                    clear_terminal()
                     company_submenu()
                     #we need to exit out the company_submenu function
                     is_on_company_menu = False
                 
                 else:
-
                     #check if the provided input has a match in the companies db
                     cursor.execute('SELECT COUNT(*) FROM companies WHERE id = %s', [int(view_employees)])
                     company_found = cursor.fetchone()[0]
 
                     if company_found < 1:
-                        print("No company correspond with that id")
+                        print("No company corresponds with that ID #")
                     else:
                         cursor.execute('SELECT * FROM employees WHERE company_id = %s', [int(view_employees)])
                         all_employee = cursor.fetchall()
@@ -89,7 +102,9 @@ Please select from the following options:
             company_name = input('Enter company name: ')
             cursor.execute('INSERT INTO companies (name) VALUES (%s)', [company_name])
             connection.commit()
-            print('Company successfully added to database!')
+            input('Company successfully added to database! [PRESS ENTER TO CONTINUE]')
+            clear_terminal()
+            company_submenu()
         elif selection == '3':
             # stores entire company table in list
             cursor.execute('SELECT * FROM companies')
@@ -105,7 +120,9 @@ Please select from the following options:
             cursor.execute('UPDATE companies SET name = %s WHERE id = %s', [company_name, company_id])
             connection.commit()
             # prints success message for user
-            print('Company name successfully updated!')
+            input('Company name successfully updated! [PRESS ENTER TO CONTINUE]')
+            clear_terminal()
+            company_submenu()
         elif selection == '4':
             # stores entire company table in list
             cursor.execute('SELECT * FROM companies')
@@ -120,14 +137,16 @@ Please select from the following options:
             cursor.execute('DELETE FROM companies WHERE id = %s', [company_id])
             connection.commit()
             # prints success message for user
-            print('Company successfully deleted!')
+            input('Company successfully deleted! [PRESS ENTER TO CONTINUE]')
+            clear_terminal()
+            company_submenu()
         elif selection == '5':
+            clear_terminal()
             main_menu()
             #we need to exit out the company_submenu function
             is_on_company_menu = False
 
-
-def employee_submenu():
+def employee_menu_text():
     print("""EMPLOYEES
 
 Please select from the following options:
@@ -138,17 +157,36 @@ Please select from the following options:
 4. Delete Employee
 5. Back to Main Menu
 """)
-    while True:
+
+def employee_submenu():
+    is_on_employee_menu = True
+    while is_on_employee_menu:
+        employee_menu_text()
         selection = input('> ')
         if selection == '1':
             cursor.execute('SELECT * FROM employees')
-            print(cursor.fetchall())
+            all_employees = cursor.fetchall()
+            print('\nALL EMPLOYEES')
+            for employee in all_employees:
+                # grabs/prints both employee and related company
+                cursor.execute(f'SELECT name FROM companies WHERE id = {employee[2]}')
+                company = cursor.fetchone()
+                try:
+                    company = str(company[0])
+                except:
+                    # does nothing if above doesn't work
+                    pass
+                print(f"{employee[0]}. {employee[1]}, {company}")
+            input('[PRESS ENTER TO CONTINUE]')
+            clear_terminal()
         elif selection == '2':
             employee_name = input('Enter employee name: ')
             employee_company_id = input('Enter company ID: ')
             cursor.execute('INSERT INTO employees (name, company_id) VALUES (%s, %s)', [employee_name, employee_company_id])
             connection.commit()
-            print('Employee successfully added to database!')
+            input('Employee successfully added to database! [PRESS ENTER TO CONTINUE]')
+            clear_terminal()
+            employee_submenu()
         elif selection == '3':
             cursor.execute('SELECT * FROM employees')
             all_employees = cursor.fetchall()
@@ -160,7 +198,9 @@ Please select from the following options:
             employee_company_id = input('Enter new company ID: ')
             cursor.execute('UPDATE employees SET name = %s, company_id = %s WHERE id = %s', [employee_name, employee_company_id, employee_id])
             connection.commit()
-            print('Employee successfully updated!')
+            input('Employee successfully updated! [PRESS ENTER TO CONTINUE]')
+            clear_terminal()
+            employee_submenu()
         elif selection == '4':
             cursor.execute('SELECT * FROM employees')
             all_employees = cursor.fetchall()
@@ -170,27 +210,31 @@ Please select from the following options:
             employee_id = input('Enter the # of the employee to be deleted: ')
             cursor.execute('DELETE FROM employees WHERE id = %s', [employee_id])
             connection.commit()
-            print('Employee successfully deleted!')
+            input('Employee successfully deleted!  [PRESS ENTER TO CONTINUE]')
+            clear_terminal()
+            employee_submenu()
         elif selection == '5':
+            clear_terminal()
             main_menu()
-
+            is_on_employee_menu = False
 
 # main program loop
+clear_terminal()
 main_menu()
 while program_exit == False:
-    selection = input('> ')
-    if selection == '1':
+    main_selection= '0'
+    main_selection = input('> ')
+    if main_selection == '1':
+        clear_terminal()
         company_submenu()
-    elif selection == '2':
+    elif main_selection == '2':
+        clear_terminal()
         employee_submenu()
-    elif selection == '3':
-        print('Goodbye! ')
+    elif main_selection == '3':
+        clear_terminal()
+        print('Goodbye!')
         program_exit = True
 
-
-# grabs and displays all companies from table
-# cursor.execute('SELECT * FROM companies;')
-# print(cursor.fetchall())
 
 # closes connection
 connection.close()
