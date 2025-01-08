@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.6 (Ubuntu 16.6-1.pgdg24.04+1)
--- Dumped by pg_dump version 16.6 (Ubuntu 16.6-1.pgdg24.04+1)
+-- Dumped from database version 16.6 (Homebrew)
+-- Dumped by pg_dump version 16.6 (Homebrew)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -21,7 +21,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: companies; Type: TABLE; Schema: public; Owner: missfionajean
+-- Name: companies; Type: TABLE; Schema: public; Owner: jonasmbp
 --
 
 CREATE TABLE public.companies (
@@ -30,10 +30,10 @@ CREATE TABLE public.companies (
 );
 
 
-ALTER TABLE public.companies OWNER TO missfionajean;
+ALTER TABLE public.companies OWNER TO jonasmbp;
 
 --
--- Name: companies_id_seq; Type: SEQUENCE; Schema: public; Owner: missfionajean
+-- Name: companies_id_seq; Type: SEQUENCE; Schema: public; Owner: jonasmbp
 --
 
 CREATE SEQUENCE public.companies_id_seq
@@ -45,17 +45,17 @@ CREATE SEQUENCE public.companies_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.companies_id_seq OWNER TO missfionajean;
+ALTER SEQUENCE public.companies_id_seq OWNER TO jonasmbp;
 
 --
--- Name: companies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: missfionajean
+-- Name: companies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: jonasmbp
 --
 
 ALTER SEQUENCE public.companies_id_seq OWNED BY public.companies.id;
 
 
 --
--- Name: employees; Type: TABLE; Schema: public; Owner: missfionajean
+-- Name: employees; Type: TABLE; Schema: public; Owner: jonasmbp
 --
 
 CREATE TABLE public.employees (
@@ -65,10 +65,10 @@ CREATE TABLE public.employees (
 );
 
 
-ALTER TABLE public.employees OWNER TO missfionajean;
+ALTER TABLE public.employees OWNER TO jonasmbp;
 
 --
--- Name: employees_id_seq; Type: SEQUENCE; Schema: public; Owner: missfionajean
+-- Name: employees_id_seq; Type: SEQUENCE; Schema: public; Owner: jonasmbp
 --
 
 CREATE SEQUENCE public.employees_id_seq
@@ -80,42 +80,44 @@ CREATE SEQUENCE public.employees_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.employees_id_seq OWNER TO missfionajean;
+ALTER SEQUENCE public.employees_id_seq OWNER TO jonasmbp;
 
 --
--- Name: employees_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: missfionajean
+-- Name: employees_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: jonasmbp
 --
 
 ALTER SEQUENCE public.employees_id_seq OWNED BY public.employees.id;
 
 
 --
--- Name: companies id; Type: DEFAULT; Schema: public; Owner: missfionajean
+-- Name: companies id; Type: DEFAULT; Schema: public; Owner: jonasmbp
 --
 
 ALTER TABLE ONLY public.companies ALTER COLUMN id SET DEFAULT nextval('public.companies_id_seq'::regclass);
 
 
 --
--- Name: employees id; Type: DEFAULT; Schema: public; Owner: missfionajean
+-- Name: employees id; Type: DEFAULT; Schema: public; Owner: jonasmbp
 --
 
 ALTER TABLE ONLY public.employees ALTER COLUMN id SET DEFAULT nextval('public.employees_id_seq'::regclass);
 
 
 --
--- Data for Name: companies; Type: TABLE DATA; Schema: public; Owner: missfionajean
+-- Data for Name: companies; Type: TABLE DATA; Schema: public; Owner: jonasmbp
 --
 
 COPY public.companies (id, name) FROM stdin;
 3	Google
 4	Netflix
 1	Tesla
+5	Facebook
+7	Amazon
 \.
 
 
 --
--- Data for Name: employees; Type: TABLE DATA; Schema: public; Owner: missfionajean
+-- Data for Name: employees; Type: TABLE DATA; Schema: public; Owner: jonasmbp
 --
 
 COPY public.employees (id, name, company_id) FROM stdin;
@@ -127,21 +129,21 @@ COPY public.employees (id, name, company_id) FROM stdin;
 
 
 --
--- Name: companies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: missfionajean
+-- Name: companies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: jonasmbp
 --
 
-SELECT pg_catalog.setval('public.companies_id_seq', 4, true);
+SELECT pg_catalog.setval('public.companies_id_seq', 8, true);
 
 
 --
--- Name: employees_id_seq; Type: SEQUENCE SET; Schema: public; Owner: missfionajean
+-- Name: employees_id_seq; Type: SEQUENCE SET; Schema: public; Owner: jonasmbp
 --
 
 SELECT pg_catalog.setval('public.employees_id_seq', 4, true);
 
 
 --
--- Name: companies unique_name; Type: CONSTRAINT; Schema: public; Owner: missfionajean
+-- Name: companies unique_name; Type: CONSTRAINT; Schema: public; Owner: jonasmbp
 --
 
 ALTER TABLE ONLY public.companies
