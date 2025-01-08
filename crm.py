@@ -125,7 +125,7 @@ def company_submenu():
             company_submenu()
         elif selection == '4':
             # stores entire company table in list
-            cursor.execute('SELECT * FROM companies')
+            cursor.execute('SELECT * FROM companies ORDER BY id ASC')
             all_companies = cursor.fetchall()
             # for loop to display list in readable format
             print("All Companies:")
@@ -133,13 +133,23 @@ def company_submenu():
                 print(str(company[0]) + '.' + ' ' + company[1])
             # asks user to select a company to be deleted
             company_id = input('Enter the # of company to be deleted: ')
-            # deletes selected entry from database
-            cursor.execute('DELETE FROM companies WHERE id = %s', [company_id])
-            connection.commit()
-            # prints success message for user
-            input('Company successfully deleted! [PRESS ENTER TO CONTINUE]')
-            clear_terminal()
-            company_submenu()
+
+            cursor.execute('SELECT COUNT(*) FROM employees WHERE company_id = %s', [company_id])
+            employee_count = cursor.fetchone()[0]
+
+            if employee_count < 1:
+                # deletes selected entry from database
+                cursor.execute('DELETE FROM companies WHERE id = %s', [company_id])
+                connection.commit()
+                # prints success message for user
+                input('Company successfully deleted! [PRESS ENTER TO CONTINUE]')
+                clear_terminal()
+                company_submenu()
+            else:
+                print("\nAll Employees must be Let go before deleting company profile\n")
+                input('[PRESS ENTER TO CONTINUE]')
+                clear_terminal()
+            
         elif selection == '5':
             clear_terminal()
             main_menu()
